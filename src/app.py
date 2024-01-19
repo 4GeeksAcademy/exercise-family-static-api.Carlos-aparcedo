@@ -38,6 +38,23 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
+@app.route('/member/<int:member_id>', methods=['GET']) #creacion de un endpoint 
+            #  1.primero definimos la ruta y el metodo. 
+            #  2. hay que crear la funcion que va a procesar la peticion(el nombre de la funcion tiene que tener un nombre de acuerdo con lo que trabajas). 
+            # 3.retornar una respuesta(cada endpoint es una funcion distinta, cada una tiene un return propio)
+            # 4. escribir la logica
+def get_one_member(member_id):
+
+    # this is how you can use the Family datastructure by calling its methods
+    # members = jackson_family.get_all_members()
+    # response_body = {
+    #     "hello": "world",
+    #     "family": member
+    # }
+
+
+    return jsonify("OK"), 200
+
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
