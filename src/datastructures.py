@@ -45,6 +45,10 @@ class FamilyStructure:
         pass
 
     def get_member(self, id):
+        for member in self._members:
+            if member["id"] == id:
+                return member
+
         # fill this method and update the return // hacer un for 
         pass
 
