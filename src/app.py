@@ -27,30 +27,30 @@ def sitemap():
 
 @app.route('/members', methods=['GET'])
 def handle_hello():
-    # this is how you can use the Family datastructure by calling its methods
     members = jackson_family.get_all_members()
-    response_body = {
-        "family": members
-    }
-    return jsonify(response_body), 200
+    return jsonify(members), 200
 
-@app.route('/member/<int:member_id>', methods=['GET']) #creacion de un endpoint 
-            # 1.primero definimos la ruta y el metodo. 
-            # 2.hay que crear la funcion que va a procesar la peticion(el nombre de la funcion tiene que tener un nombre de acuerdo con lo que trabajas). 
-            # 3.retornar una respuesta(cada endpoint es una funcion distinta, cada una tiene un return propio)
-            # 4.escribir la logica
+@app.route('/member', methods=['POST']) 
+def add_new_member(): 
+    response = request.get_json() 
+    new_member = response 
+    return jsonify(jackson_family.add_member(new_member)), 200
 
-def get_one_member(member_id):
-    member = jackson_family.get_member(member_id)
-    print(member)
-    if member is None:
-        return jsonify({"msg": "no se encontraron miembros"}), 404 # con los 2 puntos ":" se le agrega valor a un objeto
-    # this is how you can use the Family datastructure by calling its methods
-    # members = jackson_family.get_all_members()
-    response_body = {
-        "member": member
-    }
-    return jsonify(response_body), 200
+@app.route('/member/<int:member_id>', methods=['GET'])
+def get_a_member(member_id):
+    sole_member = jackson_family.get_member(member_id)
+    if sole_member is not None:
+        return jsonify(sole_member), 200
+    
+    return jsonify({'msg': 'User has not been found'}), 404
+
+    
+@app.route('/member/<int:member_id>', methods=['DELETE'])
+def delete_member(member_id):
+    result = jackson_family.delete_member(member_id)
+    if result["done"]:
+        return jsonify(result), 200
+    return jsonify(result), 404
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
