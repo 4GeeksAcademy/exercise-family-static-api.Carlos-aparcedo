@@ -43,12 +43,17 @@ class FamilyStructure:
         }
         self._members.append(family_member)
         pass #(significa continua)
-        
+
         # fill this method and update the return // metodo append con lo que pases del postman al body
         # pass
+    
     def delete_member(self, id):
-        # fill this method and update the return // utilizar el metodo POP para eliminar el miembro con el mismo id
-        pass
+        # fill this method and update the return // 
+        for member in self._members:
+            if member["id"] == id:
+                self._members.remove(member)
+                return member
+        
     def get_member(self, id):
         for member in self._members:
             if member["id"] == id:
