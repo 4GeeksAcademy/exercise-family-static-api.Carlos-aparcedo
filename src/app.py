@@ -53,17 +53,13 @@ def get_one_member(member_id):
 
 @app.route('/member', methods=['POST']) 
 def add_member():
-    request_body = request.json
-    # member = jackson_family.add_member(member)
-    miembro = {
-                "id": jackson_family._generateId(),
-                "first_name": request_body["first_name"],
-                "last_name": jackson_family.last_name,
-                "age": request_body["age"] ,
-                "lucky_numbers": request_body ["lucky_numbers"] }
-    print(miembro)
-
-    return jsonify("ok"), 200
+    request_body = request.get_json()
+    if not request_body:
+        return jsonify({"error": "Request body is empty"}), 
+    
+    jackson_family.add_member(request_body)
+    
+    return jsonify("Member added successfully"), 201
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':

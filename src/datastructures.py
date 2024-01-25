@@ -32,10 +32,20 @@ class FamilyStructure:
     # read-only: Use this method to generate random members ID's when adding members into the list
     def _generateId(self):
         return randint(0, 99999999)
+    
     def add_member(self, member):
+        family_member = {
+            "id": self._generateId(),
+            "first_name": member.get("first_name"),
+            "last_name": self.last_name,
+            "age": member.get("age"),
+            "lucky_numbers": member.get("lucky_numbers")
+        }
+        self._members.append(family_member)
+        pass #(significa continua)
         
         # fill this method and update the return // metodo append con lo que pases del postman al body
-        pass
+        # pass
     def delete_member(self, id):
         # fill this method and update the return // utilizar el metodo POP para eliminar el miembro con el mismo id
         pass
@@ -48,3 +58,5 @@ class FamilyStructure:
     # this method is done, it returns a list with all the family members
     def get_all_members(self):
         return self._members
+    
+    
