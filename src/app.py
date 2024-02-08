@@ -19,57 +19,73 @@ jackson_family = FamilyStructure("Jackson")
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
+
 # generate sitemap with all your endpoints
 @app.route('/')
 def sitemap():
     return generate_sitemap(app)
 
-# construccion de Endpoints
 @app.route('/members', methods=['GET'])
 def handle_hello():
-    # this is how you can use the Family datastructure by calling its methods
-    members = jackson_family.get_all_members()
-    response_body = {
-        "family": members
-    }
-    return jsonify(response_body), 200
 
-@app.route('/member/<int:member_id>', methods=['GET']) #creacion de un endpoint
+    # this is how you can use the Family datastructure by calling its methods
             # 1.primero definimos la ruta y el metodo.
             # 2.hay que crear la funcion que va a procesar la peticion(el nombre de la funcion tiene que tener un nombre de acuerdo con lo que trabajas).
             # 3.retornar una respuesta(cada endpoint es una funcion distinta, cada una tiene un return propio)
             # 4.escribir la logica
+    members = jackson_family.get_all_members()
+    response_body = {
+        "family": members
+    }
+
+    return jsonify(response_body), 200
+#obtener un solo miembro
+@app.route('/member/<int:member_id>', methods=['GET'])
 def get_one_member(member_id):
+
     member = jackson_family.get_member(member_id)
-    print(member)
-    if member is None:
-        return jsonify({"msg": "no se encontraron miembros"}), 404 # con los 2 puntos ":" se le agrega valor a un objeto
-    # this is how you can use the Family datastructure by calling its methods
-    # members = jackson_family.get_all_members()
     response_body = {
         "member": member
     }
-    return jsonify(response_body), 200
 
-@app.route('/member', methods=['POST']) 
-def add_member():
-    request_body = request.get_json()
-    if not request_body:
-        return jsonify({"error": "Request body is empty"}), 
-    
-    jackson_family.add_member(request_body)
-    
-    return jsonify("Member added successfully"), 200
+    return jsonify(response_body), 200
+#añadir un miembro
+@app.route('/member', methods=['POST'])
+def add_new_member():
+
+    request_body = request.json
+
+    new_member={
+        "first_name":request_body["first_name"],
+        "age":request_body["age"],
+        "lucky_numbers":request_body["lucky_numbers"],
+        "id":jackson_family._generateId()
+    }
+
+    jackson_family.add_member(new_member)
+
+    return jsonify(new_member), 200
 
 @app.route('/member/<int:member_id>', methods=['DELETE'])
 def delete_one_member(member_id):
+
     jackson_family.delete_member(member_id)
     response_body = {
         "done": True
     }
+
     return jsonify(response_body), 200
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
     app.run(host='0.0.0.0', port=PORT, debug=True)
+
+
+
+
+
+    # 1.primero definimos la ruta y el metodo.
+            # 2.hay que crear la funcion que va a procesar la peticion(el nombre de la funcion tiene que tener un nombre de acuerdo con lo que trabajas).
+            # 3.retornar una respuesta(cada endpoint es una funcion distinta, cada una tiene un return propio)
+            # 4.escribir la logica
